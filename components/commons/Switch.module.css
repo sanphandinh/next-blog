@@ -1,0 +1,17 @@
+.slider {
+  @apply h-full bg-gray-900 flex items-center;
+  width: calc(theme('spacing.5') * 2);
+}
+
+.slider::before {
+  content: '';
+  @apply z-10 w-5 h-5 rounded-full bg-white transition-transform duration-300 ease-in-out;
+}
+
+label:hover > .slider::before {
+  @apply shadow-outline;
+}
+
+input:checked + .slider::before {
+  @apply transform translate-x-full;
+}

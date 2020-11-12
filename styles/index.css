@@ -1,3 +1,15 @@
+:root {
+  --text-color: #4a5568;
+  --text-link-color: #2b6cb0;
+  --bg-color: #ffffff;
+}
+
+.dark {
+  --text-color: #f7fafc;
+  --text-link-color: #4299e1;
+  --bg-color: #6b46c1;
+}
+
 @tailwind base;
 
 /* Write your own custom base styles here */
@@ -11,3 +23,8 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
+@layer base {
+  body {
+    @apply bg-bgColor text-textColor transition-colors;
+  }
+}

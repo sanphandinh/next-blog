@@ -5,9 +5,20 @@ module.exports = {
   },
   purge: ['./components/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      sans: ['Roboto', 'sans-serif'],
+    },
     extend: {
+      inset: {
+        px: '1px',
+        '-px': '-1px',
+        '1/2': '50%',
+        '-1/2': '-50%',
+      },
       colors: {
-        'accent-1': '#333',
+        textColor: 'var(--text-color)',
+        textLink: 'var(--text-link-color)',
+        bgColor: 'var(--bg-color)',
       },
     },
   },
