@@ -11,6 +11,8 @@ import PostMeta from '../components/commons/PostMeta';
 import readingTime from '../utils/readingTime';
 import { ReadingTime } from '../types/readingTime';
 import Header from '../components/Header';
+import getBlogInfo from '../utils/getBlogInfo';
+import Intro from '../components/Intro';
 
 const components = {
   a: CustomLink,
@@ -19,6 +21,8 @@ const components = {
   // See the notes in README.md for more details.
   Head,
 };
+
+const { title } = getBlogInfo();
 
 export default function PostPage({
   source,
@@ -33,7 +37,7 @@ export default function PostPage({
   return (
     <>
       <Header>
-        <h1 className="text-2xl font-bold">Hello world</h1>
+        <h1 className="text-2xl font-bold">{title}</h1>
       </Header>
       <h3 className="text-4xl font-bold mt-16">{frontMatter.title}</h3>
       <PostMeta
@@ -41,6 +45,8 @@ export default function PostPage({
         readingTime={readTime}
       />
       <main className="mt-8">{content}</main>
+      <h1 className="text-2xl font-bold mt-10">{title}</h1>
+      <Intro className="mt-6" />
     </>
   );
 }
