@@ -1,7 +1,6 @@
-import { read } from 'fs';
 import { PostType } from '../../types/post';
 import CustomLink from '../commons/Link';
-import PostsItemMeta from './PostsItemMeta';
+import PostMeta from '../commons/PostMeta';
 
 type Props = Omit<PostType, 'content'> & { className?: string };
 
@@ -18,7 +17,7 @@ export default function PostsItem({
           {title}
         </CustomLink>
       </h3>
-      <PostsItemMeta publishedDate={publishedDate} readingTime={readingTime} />
+      <PostMeta publishedDate={publishedDate} readingTime={readingTime} />
       <p>{description}</p>
     </div>
   );

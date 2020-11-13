@@ -7,7 +7,7 @@ type Props = {
   publishedDate: PublishedDateType;
 };
 
-export default function PostsItemMeta({ publishedDate, readingTime }: Props) {
+export default function PostMeta({ publishedDate, readingTime }: Props) {
   return (
     <div className="text-sm flex items-center">
       <span>{convertPublishedDate(publishedDate)}</span>
