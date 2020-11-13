@@ -22,6 +22,8 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    margin: ({ after }) => after(['last']),
+  },
   plugins: [],
 };

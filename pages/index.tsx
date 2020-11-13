@@ -7,15 +7,25 @@ import { postFilePaths, POSTS_PATH } from '../utils/mdxUtils';
 import readingTime from '../utils/readingTime';
 import { PostType } from '../types/post';
 import Posts from '../components/Posts';
+import getBlogInfo from '../utils/getBlogInfo';
+import CustomLink from '../components/commons/Link';
+import Socials from '../components/Socials';
+
+const blogInfo = getBlogInfo();
 
 export default function Home({ posts }: { posts: Array<PostType> }) {
   return (
     <>
       <Header>
-        <h1 className="text-4xl font-bold">Hello world</h1>
+        <CustomLink href="/">
+          <h1 className="text-4xl font-bold text-textColor">
+            {blogInfo.title}
+          </h1>
+        </CustomLink>
       </Header>
       <Intro className="mt-6" />
       <Posts className="mt-16" posts={posts} />
+      <Socials className="mt-16" />
     </>
   );
 }

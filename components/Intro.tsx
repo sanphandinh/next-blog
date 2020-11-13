@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import classNames from '../helpers/classNames';
+import getBlogInfo from '../utils/getBlogInfo';
 import CustomLink from './commons/Link';
+
+const { author, avatar_link, description, title, social } = getBlogInfo();
 
 export default function Intro({ className }: { className?: string }) {
   return (
@@ -9,8 +12,8 @@ export default function Intro({ className }: { className?: string }) {
         <Image
           className="rounded-full "
           priority
-          src="/assets/images/san.phan.jpg"
-          alt="Phan Dinh San"
+          src={avatar_link}
+          alt={`${author} - ${title}`}
           layout="fill"
           quality={50}
         />
@@ -18,9 +21,9 @@ export default function Intro({ className }: { className?: string }) {
       <div className="ml-4">
         <p>
           Personal blog by{' '}
-          <CustomLink href="www.facebook.com/sanphandinh">San Phan</CustomLink>
+          <CustomLink href={social.facebook}>{author}</CustomLink>
         </p>
-        <p>I share with words and code.</p>
+        <p>{description}</p>
       </div>
     </div>
   );
