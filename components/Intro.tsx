@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import classNames from '../helpers/classNames';
+import CustomLink from './commons/Link';
 
 export default function Intro({ className }: { className?: string }) {
   return (
     <div className={classNames('flex items-center', className)}>
-      <div className="w-16 h-16 relative float-left">
+      <div className="w-12 h-12 relative float-left">
         <Image
           className="rounded-full "
           priority
@@ -16,9 +17,10 @@ export default function Intro({ className }: { className?: string }) {
       </div>
       <div className="ml-4">
         <p>
-          Personal blog by <a>San Phan</a>
+          Personal blog by{' '}
+          <CustomLink href="www.facebook.com/sanphandinh">San Phan</CustomLink>
         </p>
-        <p>I explain with words and code.</p>
+        <p>I share with words and code.</p>
       </div>
     </div>
   );
