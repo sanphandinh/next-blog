@@ -1,5 +1,5 @@
 export default {
-  title: 'Hello world',
+  title: 'San Phan',
   avatar_link: '/assets/images/san.phan.jpg',
   author: 'San Phan',
   description: 'I share with words and code',
