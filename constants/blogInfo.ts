@@ -4,9 +4,9 @@ export default {
   author: 'San Phan',
   description: 'I share with words and code',
   social: {
-    facebook: 'https://facebook.com/phandinhsan93',
+    facebook: 'https://www.facebook.com/phandinhsan93/',
     github: 'https://github.com/sanphandinh',
-    'stack overflow': 'https://stackoverflow.com',
-    twitter: 'https://twitter.com',
+    'stack overflow': 'https://stackoverflow.com/users/7560960/san',
+    twitter: 'https://twitter.com/sanphandinh',
   },
 };
