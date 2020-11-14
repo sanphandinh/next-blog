@@ -13,6 +13,7 @@ import { ReadingTime } from '../types/readingTime';
 import Header from '../components/Header';
 import getBlogInfo from '../utils/getBlogInfo';
 import Intro from '../components/Intro';
+import CodeBlock from '../components/CodeBlock';
 
 const components = {
   a: CustomLink,
@@ -20,6 +21,7 @@ const components = {
   // useful for conditionally loading components for certain routes.
   // See the notes in README.md for more details.
   Head,
+  code: CodeBlock,
 };
 
 const { title } = getBlogInfo();

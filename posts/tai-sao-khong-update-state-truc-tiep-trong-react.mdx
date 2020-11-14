@@ -1,0 +1,34 @@
+---
+title: Tại sao không cập nhật state trực tiếp thay vì gọi setState?
+description: Bạn có bao giờ thắc mắc là tại sao React lại khuyến cáo không nên sửa trực tiếp giá trị trong state hay không? Bài viết này sẽ giải thích cho bạn điều đó. Let go!
+publishedDate: 20201114
+---
+
+Bỗng nhiên sau bao nhiêu năm lập trình ReactJS tôi lại nhớ đến câu chuyện với đồng nghiệp thuở tập tành học ReactJS. Cậu bạn đồng nghiệp hỏi tôi rằng tại sao không cập nhật state một cách trực tiếp thay vì phải gọi setState. Tôi cũng mới newbie nên cứng họng một lát, trả lời một cách quanh co. Vậy thì tại sao nhỉ? Khá chắc rằng, những bạn mới làm quen với React có thể cũng có thắc mắc tương tự (hoặc rằng các bạn chưa để ý đến điều này).
+
+Lưu ý: Trong bài viết có nhắc đến những khái niệm cơ bản về React. Tôi sẽ không mô tả hoặc bàn luận về các kiến thức như component, UI, props hay state của component. Bạn đọc có thể tham khảo các thông tin trên ở trên trang chủ của thư viện React tại đây.
+
+Theo mô tả của thư viện React, một component (UI) được rerender (UI cập nhật lại) khi Props hoặc state của component đó thay đổi. Không bàn đến Props, chúng ta sẽ cùng làm một ứng dụng đơn giản để làm sáng tỏ vấn đề này nhé!
+
+Giả sử, ta có một ứng dụng bộ đếm (counter) đơn giản với 1 text hiển thị giá trị counter hiện tại và 1 button để mỗi khi click vào đó thì giá trị counter sẽ tăng lên 1. Đơn giản phải không. Hình mô tả như bên dưới.
+
+```js render=true
+class App extends React.Component {
+  state = {
+    count: 0,
+  };
+
+  _increment = () => {
+    this.setState((state) => ({ counter: state.counter + 1 }));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Counter: {this.state.count}</h1>
+        <button onClick={this._increment}>Increment</button>
+      </div>
+    );
+  }
+}
+```
