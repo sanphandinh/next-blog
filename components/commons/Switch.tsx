@@ -1,16 +1,28 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { THEME_KEY } from '../../constants/storageKey';
 import classNames from '../../helpers/classNames';
 import styles from './Switch.module.css';
 
 export default function Switch() {
+  const [currentTheme, setCurrentTheme] = useState<'dark' | 'light'>('light');
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
     if (checked) {
       document.body.classList.add('dark');
+      localStorage.setItem(THEME_KEY, 'dark');
+      setCurrentTheme('dark');
     } else {
       document.body.classList.remove('dark');
+      localStorage.setItem(THEME_KEY, 'light');
+      setCurrentTheme('light')
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem(THEME_KEY) === 'dark') {
+      setCurrentTheme('dark');
+    }
+  }, []);
 
   return (
     <label className="h-6 inline-flex cursor-pointer relative">
@@ -33,6 +45,7 @@ export default function Switch() {
         />
       </svg>
       <input
+        checked={currentTheme === 'dark'}
         className="w-0 h-0 opacity-0"
         type="checkbox"
         onChange={onCheckboxChange}

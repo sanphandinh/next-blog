@@ -16,7 +16,7 @@ export default function Socials({ className }: { className?: string }) {
               {key}
             </CustomLink>
             {index + 1 < Object.keys(social).length && (
-              <div className="w-1 h-1 bg-gray-800 ml-2 rounded-full" />
+              <div className="w-1 h-1 bg-textColor ml-2 rounded-full" />
             )}
           </div>
         );
