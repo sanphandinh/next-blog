@@ -5,7 +5,6 @@ import matter from 'gray-matter';
 import hydrate from 'next-mdx-remote/hydrate';
 import renderToString from 'next-mdx-remote/render-to-string';
 import CustomLink from '../components/commons/Link';
-import Head from 'next/head';
 import { MetaData } from '../types/post';
 import PostMeta from '../components/commons/PostMeta';
 import readingTime from '../utils/readingTime';
@@ -14,7 +13,7 @@ import Header from '../components/Header';
 import getBlogInfo from '../utils/getBlogInfo';
 import Intro from '../components/Intro';
 import CodeBlock from '../components/CodeBlock';
-import { Children } from 'react';
+import { NextSeo } from 'next-seo';
 
 const components = {
   a: CustomLink,
@@ -28,8 +27,7 @@ const components = {
   h5: ({ children }) => <h5 className="font-bold text-lg">{children}</h5>,
   h6: ({ children }) => <h6 className="font-bold text-base">{children}</h6>,
   hr: () => <hr className="my-3" />,
-  blockquote: ({ children, ...rest }) => {
-    console.log('testing: ', rest);
+  blockquote: ({ children }) => {
     return (
       <blockquote className="italic text-2xl border-l-4 -ml-4 pl-3">
         {children}
@@ -45,7 +43,6 @@ const components = {
   inlineCode: ({ children }) => (
     <code className="bg-bgCodeColor px-1">{children}</code>
   ),
-  Head,
   code: CodeBlock,
   CodeSandBox: ({ src, title }) => (
     <iframe
@@ -61,6 +58,7 @@ const components = {
   th: ({ children }) => <th className="px-4 py-2">{children}</th>,
   td: ({ children }) => <td className="border px-4 py-2">{children}</td>,
   tr: ({ children }) => <tr className="even:bg-gray-100">{children}</tr>,
+  NextSeo,
 };
 
 const { title } = getBlogInfo();

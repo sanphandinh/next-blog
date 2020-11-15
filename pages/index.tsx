@@ -10,12 +10,14 @@ import Posts from '../components/Posts';
 import getBlogInfo from '../utils/getBlogInfo';
 import CustomLink from '../components/commons/Link';
 import Socials from '../components/Socials';
+import { NextSeo } from 'next-seo';
 
 const blogInfo = getBlogInfo();
 
 export default function Home({ posts }: { posts: Array<PostType> }) {
   return (
     <>
+      <NextSeo title={blogInfo.title} description={blogInfo.description} />
       <Header>
         <CustomLink href="/">
           <h1 className="text-4xl font-bold text-textColor">
