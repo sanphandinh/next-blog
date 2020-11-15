@@ -57,6 +57,10 @@ const components = {
       sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
     />
   ),
+  table: ({ children }) => <table className="table-auto">{children}</table>,
+  th: ({ children }) => <th className="px-4 py-2">{children}</th>,
+  td: ({ children }) => <td className="border px-4 py-2">{children}</td>,
+  tr: ({ children }) => <tr className="even:bg-gray-100">{children}</tr>,
 };
 
 const { title } = getBlogInfo();

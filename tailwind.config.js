@@ -25,6 +25,7 @@ module.exports = {
   },
   variants: {
     margin: ({ after }) => after(['last']),
+    backgroundColor: ({ after }) => after(['even']),
   },
   plugins: [],
 };
