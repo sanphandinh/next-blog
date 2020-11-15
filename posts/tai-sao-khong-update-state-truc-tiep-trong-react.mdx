@@ -12,7 +12,37 @@ Theo mô tả của thư viện React, một component (UI) được rerender (U
 
 Giả sử, ta có một ứng dụng bộ đếm (counter) đơn giản với 1 text hiển thị giá trị counter hiện tại và 1 button để mỗi khi click vào đó thì giá trị counter sẽ tăng lên 1. Đơn giản phải không. Hình mô tả như bên dưới.
 
-```js render=true
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+
+##### Heading 5
+
+###### Heading 6
+
+---
+
+> Block quote
+
+- ul1
+- ul2
+- ul3
+
+1. ol 1
+2. ol 2
+3. ol3
+
+test _em_ **strong** ~~del~~ `a=b`
+
+<https://mdxjs.com> or [MDX](https://mdxjs.com)
+
+![alt](https://mdx-logo.now.sh)
+
+```js live=true
 class App extends React.Component {
   state = {
     count: 0,
@@ -32,3 +62,8 @@ class App extends React.Component {
   }
 }
 ```
+
+<CodeSandBox
+  src="https://codesandbox.io/embed/stoic-tesla-ucwzo?fontsize=14&hidenavigation=1&theme=dark"
+  title="stoic-tesla-ucwzo"
+/>

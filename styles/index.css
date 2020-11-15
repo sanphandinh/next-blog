@@ -2,12 +2,14 @@
   --text-color: #000000;
   --text-link-color: #e76f51;
   --bg-color: #ffffff;
+  --bg-code-color: theme('colors.yellow.200');
 }
 
 .dark {
   --text-color: #ffffff;
   --text-link-color: #f4a261;
   --bg-color: #264653;
+  --bg-code-color: theme('colors.gray.700');
 }
 
 @tailwind base;

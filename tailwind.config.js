@@ -19,6 +19,7 @@ module.exports = {
         textColor: 'var(--text-color)',
         textLink: 'var(--text-link-color)',
         bgColor: 'var(--bg-color)',
+        bgCodeColor: 'var(--bg-code-color)',
       },
     },
   },
