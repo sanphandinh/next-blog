@@ -1,0 +1,29 @@
+{
+  "name": "next-blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 8080",
+    "dev:watch": "next-remote-watch ./posts",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.2",
+    "next": "10.0.1",
+    "next-mdx-remote": "^1.0.0",
+    "next-remote-watch": "^0.2.0",
+    "next-seo": "^4.17.0",
+    "prism-react-renderer": "^1.1.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.7",
+    "@types/react": "^16.9.56",
+    "postcss-flexbugs-fixes": "^5.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "tailwindcss": "^1.9.6",
+    "typescript": "^4.0.5"
+  }
+}
