@@ -6,7 +6,7 @@ export type BlogInfoType = {
   social: {
     facebook: string;
     github: string;
-    stack_overflow: string;
+    'stack overflow': string;
     twitter: string;
   };
 };
