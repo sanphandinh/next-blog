@@ -45,7 +45,9 @@ export function getStaticProps() {
       };
     })
     .sort((item1: PostType, item2: PostType) => {
-      return item2?.data?.publishedDate - item1?.data?.publishedDate;
+      return item2?.data?.publishedDate.localeCompare(
+        item1?.data?.publishedDate
+      );
     });
 
   return { props: { posts } };

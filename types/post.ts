@@ -1,6 +1,6 @@
 import { ReadingTime } from './readingTime';
 
-export type PublishedDateType = number;
+export type PublishedDateType = string;
 
 export type MetaData = {
   title: string;
