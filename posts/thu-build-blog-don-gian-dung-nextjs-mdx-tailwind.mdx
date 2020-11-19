@@ -1,0 +1,527 @@
+---
+title: Thử xây dựng một blog đơn giản sử dụng nextjs + mdx + tailwind
+description: Bài viết mang tính chất trải nghiệm là chính. Việc hướng dẫn có thể không cần thiết nhưng cũng có thể tham khảo
+publishedDate: 2020/11/15
+---
+
+<NextSeo
+  title="Thử xây dựng một blog đơn giản sử dụng nextjs + mdx + tailwind"
+  description="Bài viết mang tính chất trải nghiệm là chính. Việc hướng dẫn có thể không cần thiết nhưng cũng có thể tham khảo"
+  openGraph={{
+    title: 'Thử xây dựng một blog đơn giản sử dụng nextjs + mdx + tailwind',
+    description:
+      'Bài viết mang tính chất trải nghiệm là chính. Việc hướng dẫn có thể không cần thiết nhưng cũng có thể tham khảo',
+    url:
+      'https://www.sanphandinh.com/thu-build-blog-don-gian-dung-nextjs-mdx-tailwind',
+    type: 'article',
+    article: {
+      publishedTime: '2020-11-15T00:00:00Z',
+      modifiedTime: '2020-11-15T00:00:00Z',
+      expirationTime: '2020-11-15T00:00:00Z',
+      authors: ['https://www.sanphandinh.com'],
+    },
+    images: [
+      {
+        url: 'https://i.imgur.com/SQykUkD.png',
+        width: 850,
+        height: 650,
+        alt: 'Photo of text',
+      },
+    ],
+  }}
+/>
+
+Như mô tả bài viết này không tập trung vào hướng dẫn bạn cách xây dựng một Blog vì hiện tại bạn có thể tìm thấy vô vàn cách tạo blog rồi. Từ đơn giản cho đến phức tạp là không thiếu.
+Bài này tập trung vào việc tôi trải nghiệm một vài tính năng mới của nextjs, mdx và tailwind.
+
+> Thông thường khi cần học một cái gì đó mới để tránh nhàm chán tôi sẽ tạo thử làm một cái gì đó liên quan đến cái mà mình đang học. Như vậy sẽ tránh nhàm chán hơn rất nhiều.
+
+### Mục tiêu
+
+Tôi đã từng tạo blog sử dụng GatsbyJS nhưng không hài lòng lắm vì cảm thấy khá rườm rà, giao diện không đẹp và không phù hợp lắm nên nhân tiện vừa để tìm hiểu thêm về tailwind và mdx tranh thủ tạo lại
+cái blog cho phù hợp với mục đích bản thân hơn.
+
+Đối với tôi, tôi cần một cái gì đó thật đơn giản tập trung vào mục tiêu chính là ghi chú lại kiến thức và chia sẻ đơn giản thôi. Và một điều cần nhất là giải pháp phải free. Cái này thì với các blog được
+xây dựng dạng **static site** lại có rất dịch vụ hỗ trợ điển hình như [Netlify](https://www.netlify.com/) và [Vercel](https://vercel.com) làm việc rất tuyệt và phù hợp cho mục đích cá nhân. Thêm nữa,
+tôi là dev nên với việc tải code về viết bài rồi push lên và site tự động được build lại nó khá đơn giản và thoải mái.
+
+Nói thế thôi, tôi đưa ra mục tiêu cho cái blog của mình như sau:
+
+- Hiển thị một số thông tin cơ bản của tác giả blog
+- Trang chủ hiển thị danh sách các bài viết
+- Trang hiển thị nội dung từng bài viết
+- Quản lý theme (Nhưng sẽ không đề cập rõ phần này nhé)
+
+### Thiết lập cấu hình
+
+Chắc hẳn bạn cần biết rằng để làm việc được cần môi trường nodejs, npm hoặc yarn chứ. Hãy nhớ đảm bảo máy bạn có những thứ này nhé.
+
+#### 1. Khởi tạo Project
+
+Tôi thường sử dụng create-next-app để khởi tạo một project. Để cài đặt bạn sử dụng câu lệnh sau:
+
+<TextCenter>
+  <InlineCode>npx create-next-app</InlineCode>
+</TextCenter>
+
+hoặc nếu dùng **yarn**
+
+<TextCenter>
+  <InlineCode>yarn create next-app</InlineCode>
+</TextCenter>
+
+Các thông tin cần thêm create-next-app sẽ hỏi bạn, điền vào xong nó sẽ tạo cho bạn một project mới với tên là tên bạn đã cung cấp.
+
+Hiện tại, typescript đang là trending và các **developer** đều lựa chọn sử dụng typescript để bắt đầu dự án của họ. Tôi cũng không nằm ngoài đó, lợi ích của
+typescript là không cần bàn cãi (ngoài những cái hơi rườm rà ra - nhưng mà chấp nhận được). Cái hay ở đây là mặc định create-next-app sẽ tạo cho bạn dự án mặc định
+là dùng **Javascript** để chuyển sang **Typescript** đơn giản là tạo thêm một file bên ngoài **root folder** như: `tsconfig.json`
+
+#### 2. Cài đặt [Tailwind](https://tailwindcss.com/) (Một trải nghiệm mới mẻ và rất ổn)
+
+Tailwind là một CSS Framework mới và nó thực sự tạo lên một làn sóng Frontend trong cộng đồng. Cá nhân mình sử dụng tailwind trong dự án này như một thử nghiệm và trải nghiệm nó
+và thực sự bị cuốn hút. Tuy rằng, việc sử dụng ban đầu có thể tạo ra nhiều bỡ ngỡ nhất định nhưng khi đã quen rồi thì mọi thứ rất ổn. Thực sự khuyên mọi người trải nghiệm thử nó.
+
+Để cài đặt tailwind, đơn giản là bạn cài đặt nó thôi
+
+```js
+# Using npm
+npm install tailwindcss
+
+# Using Yarn
+yarn add tailwindcss
+```
+
+Tạo file tailwind.config.js
+
+```js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
+  purge: ['./components/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    fontFamily: {
+      sans: ['Lora', 'sans-serif'],
+    },
+    extend: {
+      inset: {
+        px: '1px',
+        '-px': '-1px',
+        '1/2': '50%',
+        '-1/2': '-50%',
+      },
+      colors: {
+        textColor: 'var(--text-color)',
+        textLink: 'var(--text-link-color)',
+        bgColor: 'var(--bg-color)',
+        bgCodeColor: 'var(--bg-code-color)',
+      },
+    },
+  },
+  variants: {
+    margin: ({ after }) => after(['last']),
+    backgroundColor: ({ after }) => after(['even']),
+  },
+  plugins: [],
+};
+```
+
+Để có thể sử dụng được tailwind trong css bạn cần cài thêm một chút nữa, có nhiều cách (đã được mô tả trong [tài liệu của tailwind](https://tailwindcss.com/docs/installation))
+ở đây ta sử dụng **PostCSS**
+
+NextJS đã cài đặt sẵn PostCSS rồi, chúng ta chỉ việc custom chúng mà thôi. Tuy nhiên, theo example của nextJS cho việc sử dụng tailwind
+ta cài thêm một vài package nữa
+
+```js
+# Using npm
+npm install --dev postcss-flexbugs-fixes postcss-preset-env
+
+# Using yarn
+
+yarn add --dev postcss-flexbugs-fixes postcss-preset-env
+```
+
+Sau khi cài đặt, tạo một file `postcss.config.js`
+
+```js
+module.exports = {
+  plugins: [
+    'tailwindcss',
+    'postcss-flexbugs-fixes',
+    [
+      'postcss-preset-env',
+      {
+        autoprefixer: {
+          flexbox: 'no-2009',
+        },
+        stage: 3,
+        features: {
+          'custom-properties': false,
+        },
+      },
+    ],
+  ],
+};
+```
+
+Nốt một chút nữa là tạo một file `index.css` và import các thành phần cơ bản của tailwind vào
+
+```css
+@tailwind base;
+
+/* Write your own custom base styles here */
+
+/* Start purging... */
+@tailwind components;
+/* Stop purging. */
+
+/* Start purging... */
+@tailwind utilities;
+/* Stop purging. */
+```
+
+Và để apply vào trong dự án chúng ta cần phải import css nhé. Ta import trong file `_app.tsx`
+
+```ts
+import '../styles/index.css';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <div className="container mx-auto px-4 md:px-8 lg:px-64 py-8">
+      <DefaultSeo {...SEO} />
+      <Component {...pageProps} />
+    </div>
+  );
+}
+
+export default MyApp;
+```
+
+Xong bước này là bạn có thể sử dụng tailwind được rồi. VD như
+
+```html
+<h1 className="text-4xl font-bold text-textColor">{blogInfo.title}</h1>
+```
+
+#### 3. Cấu hình MDX
+
+Đây là thành phần cho phép bạn tạo nên nội dung cho blog viết dưới dạng **markdown** nhưng lại vẫn sử dụng được component trong React. Rất tuyệt phải không?
+Điều này cho phép bạn tạo ra các nội dung rất động. Cá nhân mình thấy rất thích vì markdown cũng thường rất hạn chế về số lượng component và thường rất
+khó để _custom_ một cái gì đó (thường phải tìm plugin rồi config tá lả mà chưa chắc đã chạy được)
+
+Về MDX, có một chút các bạn cần chú ý. Vì mình muốn sử dụng các tính năng của **nextJS** như SSR (Server Side Rendering) và SSG (Static Site Generation). Mình đã
+tìm hiểu example của Next và quyết định sử dụng `next-mdx-remote` và nó support các tính năng mới của **NextJS**
+
+Cài đặt package:
+
+```js
+# using npm
+npm install --save next-mdx-remote gray-matter
+
+# using Yarn
+yarn add next-mdx-remote gray-matter
+```
+
+Cái **gray-matter** để ta có thể dùng được dữ liệu **frontmatter** trong file markdown nhé. **Frontmatter** là gì bạn chịu khó tự tìm hiểu.
+
+Thế thôi, cái này lại không phải config gì cả đâu.
+
+> Xong về cơ bản đã cài đặt hết những cái cần cài đặt rồi. Tổng kết là có 3 thành phần chính tạo lên project này là **NextJS + Tailwind (PostCSS) + MDX (next-mdx-remote)**
+
+### Xây dựng các thành phần căn bản khác
+
+#### 1. Tạo bài viết và liệt kê danh sách bài viết trên trang chủ
+
+Các bài viết tôi sẽ tống hết vào một thư mục là **posts**, cơ bản cấu trúc bài viết của tôi sẽ như này
+
+```js
+|--components
+  |--Common
+    |--Link.tsx (Danh sách các component dùng chung)
+  |--Header.tsx (Các component khác đặc thù hoặc chưa biết nó dùng chung không nữa)
+|--constants (lưu trữ các biến hằng)
+|--helpers (lưu trữ các function helper)
+|--pages (lưu các page - cái này mặc định next nhé
+|--posts (lưu trữ các bài viết)
+  |--hello-world.mdx
+|--styles (Lưu common css)
+|--types (lưu type common)
+|--utils (Lưu trữ các hàm util)
+```
+
+Bạn có thể tạo ra khoảng 2 bài viết nhé để còn hiển thị cho nó giống một danh sách
+
+Tạo thêm một file utils chứa hàm cho phép lấy tất cả bài viết trong thư mục **posts** nhé
+
+```js
+import fs from 'fs';
+import path from 'path';
+
+// POSTS_PATH định nghĩa đường dẫn của các bài viết
+export const POSTS_PATH = path.join(process.cwd(), 'posts');
+
+// postFilePaths là danh sách mdx file trong thư mục posts
+export const postFilePaths = fs
+  .readdirSync(POSTS_PATH)
+  // Only include md(x) files
+  .filter((path) => /\.mdx?$/.test(path));
+```
+
+Trong trang chủ (`pages/index.tsx`), ta sẽ lấy danh sách các bài viết ở trên sau đó render dưới dạng 1 list. Tất nhiên, trang này
+ta sẽ tận dụng tính năng SSG của NextJS và việc lấy danh sách bài viết sẽ thực hiện trong `getStaticProps` (hàm này được thực hiện lúc
+build project - trong quá trình dev nó thực hiện mỗi lần request nhé. Hàm này trả về danh sách bài viết và được đưa vào
+component qua props.
+
+Để bạn có cái nhìn toàn cảnh thì tôi đưa ra đầy đủ file `pages/index.tsx`
+
+```js
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import Header from '../components/Header';
+import Intro from '../components/Intro';
+import { postFilePaths, POSTS_PATH } from '../utils/mdxUtils';
+import readingTime from '../utils/readingTime';
+import { PostType } from '../types/post';
+import Posts from '../components/Posts';
+import getBlogInfo from '../utils/getBlogInfo';
+import CustomLink from '../components/commons/Link';
+import Socials from '../components/Socials';
+import { NextSeo } from 'next-seo';
+
+const blogInfo = getBlogInfo();
+
+export default function Home({ posts }: { posts: Array<PostType> }) {
+  return (
+    <>
+      //Component cho việc SEO
+      <NextSeo title={blogInfo.title} description={blogInfo.description} />
+      //Component cho hiển thị Header
+      <Header>
+        <CustomLink href="/">
+          <h1 className="text-4xl font-bold text-textColor">
+            {blogInfo.title}
+          </h1>
+        </CustomLink>
+      </Header>
+      // Component hiển thị thông tin giới thiệu
+      <Intro className="mt-6" />
+      //Component post hiển thị danh sách bài viết. Đầu vào sẽ là tất cả bài
+      viết mà ta có.
+      <Posts className="mt-16" posts={posts} />
+      //Component hiển thị thông tin về mạng xã hội
+      <Socials className="mt-16" />
+    </>
+  );
+}
+
+//Hàm này được thực hiện trong quá trình build, và nó lấy danh sách bài viết trong thư mục posts.
+// và dữ liệu truyền xuống qua props.
+export function getStaticProps() {
+  const posts = postFilePaths
+    .map((filePath) => {
+      const source = fs.readFileSync(path.join(POSTS_PATH, filePath));
+      const { content, data } = matter(source);
+      return {
+        content,
+        data,
+        filePath,
+        readingTime: readingTime(content),
+      };
+    })
+    .sort((item1: PostType, item2: PostType) => {
+      return item2?.data?.publishedDate.localeCompare(
+        item1?.data?.publishedDate
+      );
+    });
+
+  return { props: { posts } };
+}
+```
+
+Kết quả:
+
+![sanphandinh.com - trang danh sach bai viet](https://i.imgur.com/SQykUkD.png)
+
+#### 2. Hiển thị nội dung của mỗi bài viết
+
+Sau khi có danh sách bài viết ta, mỗi khi người dùng click vào một bài viết nó sẽ chuyển sang trang nội dung bài viết. Trong phần này ta phải xây dựng
+trang detail cho mỗi bài viết.
+
+Cấu trúc route của tôi mong muốn với bài viết detail là: `/bai-viet`. Do đó, trong next ta tạo một file chi tiết bài viết như là `pages/[slug].tsx`
+
+```js
+export default function PostPage({
+  source,
+  frontMatter,
+  readTime,
+}: {
+  source: any,
+  frontMatter: MetaData,
+  readTime: ReadingTime,
+}) {
+  const content = hydrate(source, { components });
+  return (
+    <>
+      <Header>
+        <CustomLink href="/">
+          <h1 className="text-2xl font-bold">{title}</h1>
+        </CustomLink>
+      </Header>
+      <h3 className="text-4xl font-bold mt-16">{frontMatter.title}</h3>
+      <PostMeta
+        publishedDate={frontMatter.publishedDate}
+        readingTime={readTime}
+      />
+      <main className="mt-8">{content}</main>
+      <h1 className="text-2xl font-bold mt-10">{title}</h1>
+      <Intro className="mt-6" />
+    </>
+  );
+}
+
+//Nhận dữ liệu từ getStaticPaths và lấy dữ liệu của mỗi bài viết truyền xuống component và render bài viết tương ứng
+export const getStaticProps = async ({ params }) => {
+  const postFilePath = path.join(POSTS_PATH, `${params.slug}.mdx`);
+  const source = fs.readFileSync(postFilePath);
+  const { content, data } = matter(source);
+
+  const mdxSource = await renderToString(content, {
+    components,
+    // Optionally pass remark/rehype plugins
+    mdxOptions: {
+      remarkPlugins: [],
+      rehypePlugins: [],
+    },
+    scope: data,
+  });
+
+  return {
+    props: {
+      source: mdxSource,
+      frontMatter: data,
+      readTime: readingTime(content),
+    },
+  };
+};
+
+// Hàm này lấy danh sách các bài viết và truyền xuống hàm getStaticProps
+export const getStaticPaths = async () => {
+  const paths = postFilePaths
+    // Remove file extensions for page paths
+    .map((path) => path.replace(/\.mdx?$/, ''))
+    // Map the path into the static paths object required by Next.js
+    .map((slug) => ({ params: { slug } }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+```
+
+Ở đây, trong quá trình build project, tất cả các bài viết trong thư mục **posts** sẽ được lấy và render ra các file tĩnh tương ứng.
+Đây được coi là một điểm rất mạnh của Next bổ sung trong thời gian gần đây. Việc sử dụng file tĩnh đem lại rất nhiều lợi ích cho website
+mà quan trọng nhất là giảm thời gian tải file và tận dụng tính năng cache... (còn gì nữa bạn có thể tự tìm hiểu)
+
+#### 3. Style nội dung markdown hiển thị trên website
+
+Bình thường nếu bạn không có cấu hình gì cả thì giá trị source nhận được là **html string** gồm các thẻ như: _div, p, code, pre..._
+Và nội dung hiển thị sẽ theo style mặc định của website của bạn. Trông sẽ vô cùng nhàm chán.
+
+Với tôi, để style cho nội dung của markdown có nhiều cách. Tôi sẽ liệt kê nhưng cách mà tôi biết, còn bạn có thể search google để có các bài hướng dẫn khác
+
+1. Tạo một wrapper cho content và sau đó bạn định nghĩ style cho các thẻ của markdown được render ra bao gồm thẻ p, div...
+2. Sử dụng tailwind plugin - [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography)
+3. Custom từng component hiển thị từng phần như **Paragraph, Header 1, Header 2...** cung cấp cho MDX
+
+Trong các cách trên, tôi chọn cách 3 vì nó cho tôi đầy đủ khả năng custom theo ý muốn (có thể nói thích thì sửa) và thực ra các component base của
+markdown nó không nhiều.
+
+Với cách này tôi phải định nghĩa một object map các thành phần markdown với component tương ứng. Ngoài ra, bạn có thể cung cấp thêm các
+component khác và sử dụng nó trong file mdx như trong JSX. Rất tuyệt đó.
+
+```js
+const components = {
+  a: CustomLink,
+  p: ({ children }) => (
+    <p className="text-base leading-7 text-justify mb-3">{children}</p>
+  ),
+  h1: ({ children }) => <h1 className="font-bold text-4xl">{children}</h1>,
+  h2: ({ children }) => <h2 className="font-bold text-3xl">{children}</h2>,
+  h3: ({ children }) => <h3 className="font-bold text-2xl">{children}</h3>,
+  h4: ({ children }) => <h4 className="font-bold text-xl">{children}</h4>,
+  h5: ({ children }) => <h5 className="font-bold text-lg">{children}</h5>,
+  h6: ({ children }) => <h6 className="font-bold text-base">{children}</h6>,
+  hr: () => <hr className="my-3" />,
+  blockquote: ({ children }) => {
+    return (
+      <blockquote className="italic text-2xl border-l-4 -ml-4 pl-3">
+        {children}
+      </blockquote>
+    );
+  },
+  ul: ({ children }) => <ul className="list-disc list-inside">{children}</ul>,
+  ol: ({ children }) => (
+    <ol className="list-decimal list-inside">{children}</ol>
+  ),
+  em: ({ children }) => <span className="italic">{children}</span>,
+  strong: ({ children }) => <span className="font-bold">{children}</span>,
+  inlineCode: ({ children }) => (
+    <code className="bg-bgCodeColor px-1">{children}</code>
+  ),
+  InlineCode: ({ children }) => (
+    <code className="bg-bgCodeColor px-1">{children}</code>
+  ),
+  code: CodeBlock,
+  CodeSandBox: ({ src, title }) => (
+    <iframe
+      src={src}
+      title={title}
+      className="w-full border-0"
+      style={{ height: '500px' }}
+      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+    />
+  ),
+  table: ({ children }) => <table className="table-auto">{children}</table>,
+  th: ({ children }) => <th className="px-4 py-2">{children}</th>,
+  td: ({ children }) => <td className="border px-4 py-2">{children}</td>,
+  tr: ({ children }) => <tr className="even:bg-gray-100">{children}</tr>,
+  NextSeo,
+  TextCenter: ({ children }) => <div className="text-center">{children}</div>,
+};
+```
+
+Object này được truyền vào trong hàm `renderToString` trong `getStaticProps`
+
+```js
+const mdxSource = await renderToString(content, {
+  components,
+  // Optionally pass remark/rehype plugins
+  mdxOptions: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+  scope: data,
+});
+```
+
+#### 4. Kết quả đạt được
+
+![sanphandinh.com - trang chi tiet bai viet](https://i.imgur.com/gMrwjhF.png)
+
+### Kết thúc
+
+Như đã nói ngay từ đầu, bài viết chỉ là một ghi chép lại trải nghiệm sử dụng kết hợp NextJS + MDX + Tailwind và kết quả đạt được là một blog cá nhân của tôi.
+
+Với NextJS, tôi đã biết tính năng SSG của nó tuy nhiên giờ mới có cơ hội để thực hiện và thực sự không quá bất ngờ, nó thực sự tốt. Nếu các web app có thể tận dụng được khả năng này sẽ rất tốt
+cho trang web của bạn.
+
+Về Tailwind thực sự là một trải nghiệm tuyệt với, nó chắc chắn sẽ tạo nên trào lưu trong thời gian tới (thực sự nó đang hot lắm rồi). Có thể nói nó cho phép quá trình dev CSS trở nên đơn giản,
+các solution được giải quyết nhanh chóng và các lỗi thường gặp về CSS được hạn chế triệt để.
+
+Về MDX nó thực sự cho phép ta sáng tạo nội dung dễ dàng, dễ style các nội dung được hiển thị và quá custom vì cho phép bạn nhúng hẳn component vào markdown.
+
+Bài viết mang tính chất giới thiệu và hướng dẫn sơ bộ, một vài tính năng như theme, SEO tôi không nói ở đây. Bạn có thể tham khảo source code tại github của tôi [tại đây](https://github.com/sanphandinh/next-blog).

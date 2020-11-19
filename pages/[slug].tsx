@@ -43,6 +43,9 @@ const components = {
   inlineCode: ({ children }) => (
     <code className="bg-bgCodeColor px-1">{children}</code>
   ),
+  InlineCode: ({ children }) => (
+    <code className="bg-bgCodeColor px-1">{children}</code>
+  ),
   code: CodeBlock,
   CodeSandBox: ({ src, title }) => (
     <iframe
@@ -59,6 +62,7 @@ const components = {
   td: ({ children }) => <td className="border px-4 py-2">{children}</td>,
   tr: ({ children }) => <tr className="even:bg-gray-100">{children}</tr>,
   NextSeo,
+  TextCenter: ({ children }) => <div className="text-center">{children}</div>,
 };
 
 const { title } = getBlogInfo();
