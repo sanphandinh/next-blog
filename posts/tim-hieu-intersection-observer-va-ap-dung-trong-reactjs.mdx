@@ -1,0 +1,197 @@
+---
+title: Tìm hiểu Intersection Observer và áp dụng trong ReactJS
+description: Một Web API mới và giúp ích rất nhiều trong việc phát hiện một element có đang trong viewport hay không?
+publishedDate: 2020/12/07
+---
+
+<NextSeo
+  title="Tìm hiểu Intersection Observer và áp dụng trong ReactJS"
+  description="Một Web API mới và giúp ích rất nhiều trong việc phát hiện một element có đang trong viewport hay không?"
+  openGraph={{
+    title: 'Tìm hiểu Intersection Observer và áp dụng trong ReactJS',
+    description:
+      'Một Web API mới và giúp ích rất nhiều trong việc phát hiện một element có đang trong viewport hay không?',
+    url:
+      'https://www.sanphandinh.com/thu-build-blog-don-gian-dung-nextjs-mdx-tailwind',
+    type: 'article',
+    article: {
+      publishedTime: '2020-12-07T00:00:00Z',
+      modifiedTime: '2020-12-07T00:00:00Z',
+      expirationTime: '2020-12-07T00:00:00Z',
+      authors: ['https://www.sanphandinh.com'],
+    },
+  }}
+/>
+
+Đây là một api không phải mới nó được thêm vào từ những phiên bản Chrome 58, nhưng đến tận gần đây mình mới biết đến nó qua một bài giới thiệu trên **Viblo**.
+Đến thời điểm hiện tại, API này được support trên hầu hết các trình duyệt hiện đại. Độ phủ của nó là 93.88%. Mình nghĩ các bạn hoàn toàn có thể yên tâm sử dụng.
+Tất nhiên, là nếu bạn không support IE nhé.
+
+### Giới thiệu
+
+Intersecion Observer cung cấp cho ta một cách để **quan sát sự thay đổi** của sự **giao nhau** của một **target element** với các element tổ tiên (của nó) hoặc top level element (ở đây
+là window.document đó). Sự quan sát đó sẽ là kiểu **"asynchronously"** - nghĩa là trình duyệt sẽ thay ta theo dõi nếu sự giao nhau giữa **target element** với **root element**(cái này bạn có thể setup)
+và sẽ gọi hàm callback mà bạn đăng ký.
+
+#### Việc này có ích ra sao?
+
+Nó rất có ích trong một số công việc sau:
+
+- Xử lý các vấn đề về lazy load
+- Xây dựng "Infinite scrolling"
+- Quyết định thực hiện một tác vụ nào đó khi mà một thành phần nào đó xuất hiện trong viewport...
+
+Thông thường khi để làm những công việc trên bạn sẽ phải xử lý rất nhiều thứ bao gồm việc như:
+
+- Lắng nghe sự kiện onScroll
+- Tính toán kích thước hoặc vị trí của **target element**
+- Vì phải sự kiện onScroll sẽ bắn ra hàng loạt các event -> áp dụng **debounce** hoặc **throttle**
+
+#### Ưu điểm
+
+Ta có thể liệt kế những ưu điểm khi sử dụng Intersection Observer thay cho các phương pháp truyền thống
+
+1. Performance: các này chắc chắn rồi việc để trình duyệt quản lý hết cho bạn và và việc bạn phải tự manual theo dõi sự thay đổi dựa trên các sự kiện như onScroll sẽ khác nhau rất nhiều đấy.
+2. Giao diện API đơn giản (Vâng rất đơn giản. Trong ReactJS tôi có thể tạo ra một hook để cho phép bạn tương tác và tái sử dụng code)
+3. [Polyfill](https://github.com/w3c/IntersectionObserver/tree/master/polyfill) hỗ trợ giúp cho việc sử dụng tính năng của Intersection Observer trên các trình duyệt mà chưa support.
+
+### Mô tả về API
+
+#### Để bắt đầu hãy xem một example code để tạo một **Intersection observer**
+
+```js
+let options = {
+  root: document.querySelector('#scrollArea'),
+  rootMargin: '0px',
+  threshold: 1.0,
+};
+
+let observer = new IntersectionObserver(callback, options);
+```
+
+- **root**: là một HTML Element được sử dụng như một viewport để tham chiếu tới việc hiển thị của **target element**. Cần chú ý là giá trị này bắt buộc phải là một **element tổ tiên** của
+  **target element**. Mặc định nếu bạn không truyền giá trị của nó sẽ là viewport mặc định (ở đây là window.document).
+- **rootMargin**: Tương tự như _margin_ trong css thôi. Nó xác định margin của **root element**. Giá trị này có thể là phần trăm hoặc pixel. Nó dùng để tăng giảm hoặc thu nhỏ diện tích của **root element**.
+  Giá trị mặc định của nó là 0.
+- **threshold**: giá trị này có thể là một giá trị số hoặc một dãy các giá trị. Các giá trị trong khoảng từ **0.0 - 1.0**. Giá trị này để nói với trình duyệt là với sự giao nhau trong khoảng bao nhiêu phần trăm
+  thì bắn ra sự kiện callback. VD tôi muốn kiểm tra sự giao nhau của **target element** xuất hiện 50% trong viewport thì giá trị này là _0.5_. Nó cũng có thể là một chuỗi như: [0, 0.25, 0.5, 0.75, 1]
+- **callback**: là hàm sẽ được gọi nếu xảy ra quá trình giao nhau giữa **target element** và **root element**
+
+#### Sau khi tạo xong một Intersecion Observer, ta sẽ gán nó tới một target element
+
+```js
+let target = document.querySelector('#listItem');
+observer.observe(target);
+```
+
+Có lẽ không cần giải thích thêm đoạn code trên nhé.
+
+Đến đây, khi mà **target element** xuất hiện trong viewport của **root element** với tỉ lệ phần trăm tương ứng với **threshold** thì hàm callback sẽ được thực thi.
+Hàm callback về cơ bản sẽ như sau:
+
+```js
+let callback = (entries, observer) => {
+  entries.forEach((entry) => {
+    // Each entry describes an intersection change for one observed
+    // target element:
+    //   entry.boundingClientRect
+    //   entry.intersectionRatio
+    //   entry.intersectionRect
+    //   entry.isIntersecting
+    //   entry.rootBounds
+    //   entry.target
+    //   entry.time
+  });
+};
+```
+
+Giải thích đôi chút một số tham số hay sử dụng
+
+- **isIntersecting**: thường sẽ có 2 trạng thái khi là bắt đầu giao nhau và kết thúc giao nhau. Giá trị này trả về true nếu **target element** đang giao với **root element**. Ngược lại trả về false.
+- **boundingClientRect**: nó tương tự như khi bạn sử dụng **Element.getBoundingClientRect()**
+- **intersectionRatio**: trả về giá trị bao nhiêu phần trăm giao nhau
+
+... (tự tìm hiểu tiếp các phần sau ở đây: [IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry)
+
+Trong hàm này, bạn có thể trigger ra các action tương ứng. Tùy thuộc vào hoàn cảnh nhé.
+
+### Áp dụng nó trong React
+
+Phần Intersection Observer này tôi nghĩ nó chỉ tập trung vào logic code và không động tới UI. Do vậy, trong ReactJS tôi sử dụng tính năng **hook** cho việc xây dựng tính năng này. Tất nhiên, nhược điểm của nó
+là chỉ sử dụng với Function Component. Tuy nhiên, bạn có thể tùy biến để tạo ra một **HOC** hoặc một **Component** chung cho nó.
+
+Đây là cài đặt của Intersection Observer trong ReactJS
+
+```js
+import { useEffect, useCallback } from 'react';
+
+export type CallbackIntersectionObserverFnType = (
+  entry: IntersectionObserverEntry
+) => void;
+
+type FuncType = (args: {
+  callbackFn: CallbackIntersectionObserverFnType,
+  target: React.MutableRefObject<any>,
+  root?: HTMLElement,
+  threshold?: number | number[],
+}) => void;
+
+/**
+ * Hook function for using Intersection Observer for check "display in viewport" instead scroll solution
+ * about Intersection Observer: [https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API]
+ * Browser compatibility: Chrome, Edge, Firefox, Opera, Safari, Android Webview, Chrome for Android, Safari on IOS, Samsung Internet
+ * @param callbackFn: function is called when target is intersecting in viewport
+ * @param target: target element (HTML element)
+ * @param root: root element (HTML element). If root is window then set root = null (don't pass)
+ * @param threshold: Either a single number or an array of numbers which indicate at what percentage of the target's visibility the observer's callback should be executed. If you only want to detect when visibility passes the 50% mark, you can use a value of 0.5. If you want the callback to run every time visibility passes another 25%, you would specify the array [0, 0.25, 0.5, 0.75, 1]. The default is 0 (meaning as soon as even one pixel is visible, the callback will be run). A value of 1.0 means that the threshold isn't considered passed until every pixel is visible.
+ */
+const useIntersectionObserver: FuncType = ({
+  callbackFn,
+  target,
+  root,
+  threshold,
+}) => {
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target) {
+        callbackFn(target);
+      }
+    },
+    [callbackFn]
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      root: root,
+      threshold,
+    });
+    if (target?.current) observer.observe(target?.current);
+    return () => {
+      if (target?.current) {
+        observer.unobserve(target?.current);
+      }
+    };
+  }, [callbackFn, handleObserver, root, target, threshold]);
+};
+
+export default useIntersectionObserver;
+```
+
+Hook này khá dễ hiểu nhỉ, với các tham số đầu vào nó chủ yếu tập trung vào các tham số cơ bản của Intersection Observer. Trong trường hợp root là **document** bạn có thể không truyền vào.
+Có một biến đầu vào target mình đang để kiểu là `React.MutableRefObject<any>` thay vì kiểu `HTMLElement` là có lý do nhé. Còn lý do tại sao sẽ là một bài viết khác mô tả cho nó.
+
+#### Cách sử dụng
+
+Tôi đã tạo một ví dụ về sử dụng hook intersection observe, bạn có thể thấy cách dùng sẽ rất đơn giản.
+
+Trong ví dụ này, đơn giản là 1 trang dài với nhiều section. Khi người dùng scroll tới section cuối (ở đây là section 6) thì một popup dạng leave-contact sẽ xuất hiện ở phía dưới góc bên phải màn hình.
+
+<CodeSandBox
+  src="https://codesandbox.io/embed/demo-intersection-observer-u414k?fontsize=14&hidenavigation=1&theme=dark"
+  title="Ví dụ sử dụng Intersection Observer trong ReactJS"
+/>
+
+
+> Việc xác định với Intersection Observer vô cùng đơn giản. Bạn có thể xác nhận bằng việc tự implement bằng phương pháp truyền thống sẽ thấy rõ. Ngoài ra, performance phương pháp này tốt hơn rất nhiều
+so với cách làm truyền thống khác.
